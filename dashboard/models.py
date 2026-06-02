@@ -1,7 +1,8 @@
 from django.db import models
-
+from abc import ABC
 # Create your models here.
-
+class User(ABC):
+    
 class Streaming(models.Model):
     name = models.CharField(max_length=45)
     url = models.CharField(max_length=255,default="https://teste.com")

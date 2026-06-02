@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - App de Assinaturas</title>
+    <style>
+        /* Importando uma fonte limpa semelhante à da imagem */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            /* Fundo escuro baseado na imagem */
+            background-color: #050505; 
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .header-section {
+            text-align: left;
+            margin-bottom: 8px;
+        }
+
+        .header-section h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-section p {
+            color: #A0A0A0; /* Cor cinza secundária semelhante à data de vencimento */
+            font-size: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #E0E0E0;
+            margin-left: 4px;
+        }
+
+        .form-group input {
+            /* Cor de fundo do input baseada nos cards da imagem */
+            background-color: #1A1A1A; 
+            border: 1px solid transparent;
+            border-radius: 16px; /* Bordas arredondadas iguais aos cards */
+            padding: 16px;
+            color: #FFFFFF;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #666666;
+        }
+
+        .form-group input:focus {
+            /* Borda roxa ao focar no campo, combinando com a identidade */
+            border-color: #9B51E0; 
+            background-color: #222222;
+        }
+
+        .action-button {
+            /* Cor roxa idêntica ao botão "+ Adicionar Assinatura" */
+            background: linear-gradient(135deg, #A855F7, #8B5CF6);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .action-button:hover {
+            opacity: 0.9;
+        }
+
+        .toggle-auth {
+            text-align: center;
+            font-size: 14px;
+            color: #A0A0A0;
+            margin-top: 16px;
+        }
+
+        .toggle-auth a {
+            /* Tom de roxo mais claro para links */
+            color: #A855F7; 
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .toggle-auth a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <div class="header-section">
+            <h1>Criar Conta</h1>
+            <p>Gerencie e divida suas assinaturas facilmente.</p>
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Como devemos te chamar?">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" placeholder="••••••••">
+            </div>
+
+            <button type="button" class="action-button">Cadastrar</button>
+        </form>
+
+        <div class="toggle-auth">
+            Já tem uma conta? <a href="#">Entrar agora</a>
+        </div>
+    </div>
+
+</body>
+</html>
