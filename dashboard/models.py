@@ -1,8 +1,18 @@
 from django.db import models
-from abc import ABC
+
 # Create your models here.
-class User(ABC):
+class User(models.Model):
+    #o jeito Django de classes abstratas 
+    username = models.CharField(max_length=45)
+    email = models.EmailField()
+    senha = models.CharField(max_length=128)
+
     
+    class Meta:
+        abstract = True
+    def deletar_conta(self):
+        self.delete()
+        
 class Streaming(models.Model):
     name = models.CharField(max_length=45)
     url = models.CharField(max_length=255,default="https://teste.com")
@@ -19,11 +29,9 @@ class Plano(models.Model):
     quantidade_telas = models.IntegerField()
     anuncio = models.BooleanField()
 
-class Participante(models.Model):
-    name = models.CharField(max_length=45)
-    email=  models.EmailField()
-    data_cadastro= models.DateField()
-    status = models.BooleanField() 
+class Participante(User):
+    data_cadastro= models.DateField(auto_now_add=True)
+    status = models.BooleanField(default=True) 
 
 class Grupo(models.Model):
     name = models.CharField(max_length=45)
