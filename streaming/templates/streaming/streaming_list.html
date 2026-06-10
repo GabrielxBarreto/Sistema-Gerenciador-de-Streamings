@@ -1,26 +1,98 @@
-<h1>Serviços de Streaming</h1>
-<a href="{% url 'streaming:criar' %}">+ Novo Streaming</a>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Streamings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 30px;
+    }
 
-<table>
-  <tr>
-    <th>Nome</th>
-    <th>Preço Total</th>
-    <th>Máx. Membros</th>
-    <th>Preço por Membro</th>
-    <th>Ações</th>
-  </tr>
-  {% for s in streamings %}
-  <tr>
-    <td>{{ s.nome }}</td>
-    <td>R$ {{ s.preco_total }}</td>
-    <td>{{ s.max_membros }}</td>
-    <td>R$ {{ s.preco_por_membro }}</td>
-    <td>
-      <a href="{% url 'streaming:editar' s.pk %}">Editar</a>
-      <a href="{% url 'streaming:deletar' s.pk %}">Deletar</a>
-    </td>
-  </tr>
-  {% empty %}
-  <tr><td colspan="5">Nenhum streaming cadastrado.</td></tr>
-  {% endfor %}
-</table>
+    h1 {
+      color: #333;
+    }
+
+    a.btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+
+    a.btn:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    a.editar {
+      color: #2196F3;
+      text-decoration: none;
+      margin-right: 8px;
+    }
+
+    a.deletar {
+      color: #f44336;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Serviços de Streaming</h1>
+  <a href="{% url 'streaming:criar' %}" class="btn">+ Novo Streaming</a>
+
+  <table>
+    <tr>
+      <th>Nome</th>
+      <th>Preço Total</th>
+      <th>Máx. Membros</th>
+      <th>Preço por Membro</th>
+      <th>Preço do Dono</th>
+      <th>Ações</th>
+    </tr>
+    {% for s in streamings %}
+    <tr>
+      <td>{{ s.nome }}</td>
+      <td>R$ {{ s.preco_total }}</td>
+      <td>{{ s.max_membros }}</td>
+      <td>R$ {{ s.preco_por_membro }}</td>
+      <td>R$ {{ s.preco_dono }}</td>
+      <td>
+        <a href="{% url 'streaming:editar' s.pk %}" class="editar">Editar</a>
+        <a href="{% url 'streaming:deletar' s.pk %}" class="deletar">Deletar</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">Nenhum streaming cadastrado.</td></tr>
+    {% endfor %}
+  </table>
+
+</body>
+</html>
