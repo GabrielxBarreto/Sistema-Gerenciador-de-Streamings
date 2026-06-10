@@ -7,13 +7,14 @@ class Streaming(models.Model):
     descricao = models.TextField(blank=True) # Descrição (opcional) do serviço de streaming
 
     def preco_por_membro(self):
-        return round(self.preco_total / self.max_membros, 2) # Calculo do preço por membro usando 'max_membros' com divisão por 'preço_total'
+        return round(self.preco_total / self.participantes.count(), 2) # Calcula o valor arredondado que cada membro paga
 
     def preco_dono(self): # Resolve o dilema da divisão de valores, fazendo o dono do grupo assumir a diferença
-        valor_membro = round(self.preco_total / self.max_membros, 2) # preco_por_membro
-        total_coberto = valor_membro * (self.max_membros - 1) # Total que os membros pagam juntos tirando um 'membro'
-        return round(self.preco_total - total_cobrado, 2) # Preço que todos os membros pagam - valor total, assim o dono paga os centavos de arredondamento
+        total = self.participantes.count()  # Quantia de participantes no grupo
+        valor_membro = round(self.preco_total / total, 2)  # Valor arredondado de cada membro
+        total_cobrado = valor_membro * (total - 1)  # Total pago pelos membros excluindo o dono
+        return round(self.preco_total - total_cobrado, 2)  # Valor sobressalente pago pelo dono
 
 
     def __str__(self):
-        return self.nome # Retorna o nome do serviço de streaming quando objeto for chamado na interface
+        return self.nome # Retorna o nome do serviço de streaming quando objeto for chamado na interface ref.(Django streaming 01)
