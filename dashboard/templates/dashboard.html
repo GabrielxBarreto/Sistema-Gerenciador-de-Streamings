@@ -21,6 +21,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; }
 
+        /* Container base (Mobile First) */
         .app-container { width: 100%; max-width: 480px; min-height: 100vh; padding: 24px 20px 100px; }
         
         /* Header & Pills */
@@ -30,7 +31,7 @@
         /* Dashboard Cards */
         .total-card { background-color: var(--card-bg); border-radius: 20px; padding: 32px 20px; text-align: center; margin-bottom: 32px; }
         .total-card h2 { font-size: 40px; margin: 8px 0; }
-        .savings { background-color: rgba(34, 197, 94, 0.1); color: var(--success); padding: 6px 12px; border-radius: 12px; font-size: 13px; }
+        .savings { background-color: rgba(34, 197, 94, 0.1); color: var(--success); padding: 6px 12px; border-radius: 12px; font-size: 13px; display: inline-block; }
 
         /* Listas */
         .section-title { font-size: 16px; margin-bottom: 16px; }
@@ -59,7 +60,63 @@
         .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
         .form-group input, .form-group select { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--surface); color: white; }
         
-        .fab-button { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 432px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 600; cursor: pointer; z-index: 10; }
+        /* Botão de Ação Flutuante (Mobile) */
+        .fab-button { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 432px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 600; cursor: pointer; z-index: 10; box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2); }
+
+        /* ==================== ADAPTAÇÃO PARA COMPUTADOR (DESKTOP) ==================== */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 1040px;
+                padding: 40px 20px;
+            }
+
+            header {
+                margin-bottom: 40px;
+            }
+
+            /* Transforma o layout linear em duas colunas organizadas */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: 320px 1fr;
+                gap: 40px;
+                align-items: start;
+            }
+
+            .total-card {
+                margin-bottom: 0;
+                text-align: left;
+                padding: 32px 24px;
+            }
+
+            .total-card h2 {
+                font-size: 44px;
+                margin: 12px 0 16px 0;
+            }
+
+            /* Redimensiona o FAB para virar um botão clássico de desktop no canto inferior */
+            .fab-button {
+                position: fixed;
+                bottom: 40px;
+                left: auto;
+                right: 40px;
+                transform: none;
+                width: auto;
+                max-width: 260px;
+                padding: 16px 28px;
+                border-radius: 50px;
+            }
+
+            /* Centraliza o modal no meio da tela ao invés de subir como aba */
+            .modal-overlay {
+                align-items: center;
+            }
+
+            .modal-content {
+                border-radius: 24px;
+                padding: 32px;
+                box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            }
+        }
     </style>
 </head>
 <body>
@@ -70,43 +127,55 @@
         <div class="avatar">{{ user.username|make_list|first|upper }}</div>
     </header>
 
-    <section class="total-card">
-        <p style="color: var(--text-muted);">Seu gasto total</p>
-        <h2>R$ {{ gasto_total }}</h2>
-        <div class="savings">Você economizou R$ {{ economia_total }}</div>
-    </section>
-
-    <h3 class="section-title">Próximos Vencimentos</h3>
-    
-    {% for v in vencimentos %}
-    <div class="item-card">
-        <div class="item-row">
-            <div class="item-info">
-                <div class="item-icon">📺</div>
-                <div>
-                    <h4 style="font-size: 16px;">{{ v.nome }}</h4>
-                    <p style="font-size: 13px; color: var(--text-muted);">Dia {{ v.dia }}</p>
-                </div>
-            </div>
-            <div style="text-align: right;">
-                <h4>R$ {{ v.valor_total|floatformat:2 }}</h4>
-                <p style="font-size: 12px; color: {% if v.pendentes_count > 0 %}var(--danger){% else %}var(--success){% endif %};">
-                    {{ v.pendentes_count }} pendente(s)
-                </p>
-            </div>
-        </div>
+    <!-- Estrutura de grid acionada apenas no Desktop -->
+    <div class="dashboard-grid">
         
-        <button class="btn-invite" onclick="navigator.clipboard.writeText('{{ v.link_convite }}'); alert('Link de convite copiado com sucesso!');">
-            <span>🔗</span> Copiar Link de Convite
-        </button>
-    </div>
-    {% empty %}
-    <p style="color: var(--text-muted); text-align: center; margin-top: 20px;">Nenhum grupo criado ainda.</p>
-    {% endfor %}
+        <!-- Coluna Esquerda: Dados Financeiros -->
+        <div class="side-panel">
+            <section class="total-card">
+                <p style="color: var(--text-muted);">Seu gasto total</p>
+                <h2>R$ {{ gasto_total }}</h2>
+                <div class="savings">Você economizou R$ {{ economia_total }}</div>
+            </section>
+        </div>
+
+        <!-- Coluna Direita: Lista Expandida de Vencimentos -->
+        <div class="content-panel">
+            <h3 class="section-title">Próximos Vencimentos</h3>
+            
+            {% for v in vencimentos %}
+            <div class="item-card">
+                <div class="item-row">
+                    <div class="item-info">
+                        <div class="item-icon">📺</div>
+                        <div>
+                            <h4 style="font-size: 16px;">{{ v.nome }}</h4>
+                            <p style="font-size: 13px; color: var(--text-muted);">Dia {{ v.dia }}</p>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <h4>R$ {{ v.valor_total|floatformat:2 }}</h4>
+                        <p style="font-size: 12px; color: {% if v.pendentes_count > 0 %}var(--danger){% else %}var(--success){% endif %};">
+                            {{ v.pendentes_count }} pendente(s)
+                        </p>
+                    </div>
+                </div>
+                
+                <button class="btn-invite" onclick="navigator.clipboard.writeText('{{ v.link_convite }}'); alert('Link de convite copiado com sucesso!');">
+                    <span>🔗</span> Copiar Link de Convite
+                </button>
+            </div>
+            {% empty %}
+            <p style="color: var(--text-muted); text-align: center; margin-top: 20px;">Nenhum grupo criado ainda.</p>
+            {% endfor %}
+        </div>
+
+    </div> <!-- Fim da grid -->
 
     <button class="fab-button" onclick="document.getElementById('modal').classList.add('active')">+ Adicionar Assinatura</button>
 </div>
 
+<!-- Estrutura do Modal Invisível -->
 <div class="modal-overlay" id="modal">
     <div class="modal-content">
         <h3 style="margin-bottom: 20px;">Nova Assinatura</h3>
@@ -161,7 +230,7 @@
 </div>
 
 <script>
-    // Fechar modal ao clicar fora
+    // Fechar modal ao clicar fora da área interna
     window.onclick = function(event) {
         if (event.target == document.getElementById('modal')) {
             document.getElementById('modal').classList.remove('active');
