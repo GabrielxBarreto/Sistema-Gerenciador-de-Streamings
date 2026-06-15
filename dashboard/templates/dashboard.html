@@ -3,568 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Assinaturas - Cobrança Automática</title>
+    <title>SubSplit - Gestão de Assinaturas</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
             --bg-color: #000000;
-            --card-bg: #141414;
-            --surface: #222222;
+            --card-bg: #111111;
+            --surface: #1A1A1A;
             --text-main: #FFFFFF;
             --text-muted: #888888;
-            --accent: #8B5CF6;
-            --danger: #FF453A;
-            --success: #32D74B;
+            --accent: #A855F7;
+            --danger: #EF4444;
+            --success: #22C55E;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            padding: 24px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            position: relative; /* Para garantir o alinhamento do botão flutuante no container */
-        }
-
-        /* Cabeçalho */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .greeting {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        /* Filtro Horizontal */
-        .filter-scroll {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none; 
-        }
+        .app-container { width: 100%; max-width: 480px; min-height: 100vh; padding: 24px 20px 100px; }
         
-        .filter-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-tag {
-            background-color: var(--surface);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-tag.active {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        /* Card Principal */
-        .total-card {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-        }
-
-        .total-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .total-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-        }
-
-        .total-economy {
-            color: var(--success);
-            font-size: 0.85rem;
-            font-weight: 500;
-            background: rgba(50, 215, 75, 0.1);
-            padding: 6px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        /* Listas e Cards */
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .list-container {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            padding: 8px 16px;
-        }
-
-        .list-item {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .list-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-main-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .item-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .item-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background-color: var(--surface);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-        }
-
-        .item-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .item-desc {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-top: 4px;
-        }
-
-        .item-right {
-            text-align: right;
-        }
-
-        .item-value {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .status-alert { color: var(--danger); font-size: 0.8rem; font-weight: 500; margin-top: 4px; }
+        /* Header & Pills */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .avatar { width: 40px; height: 40px; background-color: var(--surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-muted); }
         
-        /* Área de Automação do Streaming */
-        .automation-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: var(--surface);
-            padding: 12px 16px;
-            border-radius: 12px;
-            margin-top: 4px;
-        }
+        /* Dashboard Cards */
+        .total-card { background-color: var(--card-bg); border-radius: 20px; padding: 32px 20px; text-align: center; margin-bottom: 32px; }
+        .total-card h2 { font-size: 40px; margin: 8px 0; }
+        .savings { background-color: rgba(34, 197, 94, 0.1); color: var(--success); padding: 6px 12px; border-radius: 12px; font-size: 13px; }
 
-        .automation-text {
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* Listas */
+        .section-title { font-size: 16px; margin-bottom: 16px; }
+        .item-card { background-color: var(--card-bg); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .item-info { display: flex; align-items: center; gap: 16px; }
+        .item-icon { width: 48px; height: 48px; background-color: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
 
-        /* Toggle Switch (Estilo iOS) */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 46px;
-            height: 26px;
-        }
+        /* Form Controls */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #333;
-            transition: .3s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--success);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
-        }
-
-        /* Botão de Lembrete */
-        .btn-remind {
-            background-color: rgba(255, 69, 58, 0.15);
-            color: var(--danger);
-            border: 1px solid rgba(255, 69, 58, 0.3);
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            text-align: center;
-            margin-top: 8px;
-        }
-
-        .btn-remind:active {
-            background-color: rgba(255, 69, 58, 0.3);
-        }
-
-        /* Botão Flutuante */
-        .fab-button {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 40px);
-            max-width: 440px;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-            z-index: 100;
-        }
-
-        /* --- Estilos do Modal de Nova Assinatura --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* Modal subindo de baixo estilo iOS/Android */
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-content {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 480px;
-            border-radius: 24px 24px 0 0;
-            padding: 24px;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .close-modal {
-            background: var(--surface);
-            border: none;
-            color: var(--text-muted);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        .form-group input, .form-group select {
-            background-color: var(--surface);
-            border: 1px solid transparent;
-            border-radius: 12px;
-            padding: 14px;
-            color: var(--text-main);
-            font-size: 1rem;
-            outline: none;
-            width: 100%;
-            appearance: none; 
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--accent);
-        }
-
-        /* Estilizando as opções do select para ficarem escuras em alguns navegadores */
-        .form-group select option {
-            background-color: var(--surface);
-            color: var(--text-main);
-        }
-
-        .btn-submit {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 8px;
-        }
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: flex-end; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background-color: var(--card-bg); width: 100%; max-width: 480px; border-radius: 24px 24px 0 0; padding: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; }
+        .form-group input, .form-group select { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--surface); color: white; }
+        
+        .fab-button { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 432px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <header class="header">
-            <div class="greeting">Olá, Usuário</div>
-            <div class="avatar">U</div>
-        </header>
+<div class="app-container">
+    <header>
+        <h1>Olá, {{ user.username|title }}</h1>
+        <div class="avatar">{{ user.username|make_list|first|upper }}</div>
+    </header>
 
-        <div class="filter-scroll">
-            <div class="filter-tag active">Visão Geral</div>
-            <div class="filter-tag">Spotify</div>
-            <div class="filter-tag">Netflix</div>
-        </div>
+    <section class="total-card">
+        <p style="color: var(--text-muted);">Seu gasto total</p>
+        <h2>R$ {{ gasto_total }}</h2>
+        <div class="savings">Você economizou R$ {{ economia_total }}</div>
+    </section>
 
-        <div class="total-card">
-            <div class="total-label">Seu gasto total em Outubro</div>
-            <div class="total-amount">R$ 84,90</div>
-            <div class="total-economy">Você economizou R$ 84,90 dividindo</div>
-        </div>
-
-        <div>
-            <div class="section-title">Próximos Vencimentos</div>
-            <div class="list-container">
-                <div class="list-item">
-                    <div class="item-main-row">
-                        <div class="item-left">
-                            <div class="item-icon">🎵</div>
-                            <div>
-                                <div class="item-name">Spotify Premium</div>
-                                <div class="item-desc">Vence amanhã (15/Out)</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-value">R$ 21,90</div>
-                            <div class="status-alert">1 Pendente</div>
-                        </div>
-                    </div>
-                    
-                    <div class="automation-row">
-                        <div class="automation-text">
-                            <span style="font-size: 1.2rem;">🤖</span>
-                            Cobrança automática no dia
-                        </div>
-                        <label class="switch">
-                            <input type="checkbox" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+    <h3 class="section-title">Próximos Vencimentos</h3>
+    {% for v in vencimentos %}
+    <div class="item-card">
+        <div class="item-row">
+            <div class="item-info">
+                <div class="item-icon">📺</div>
+                <div>
+                    <h4 style="font-size: 16px;">{{ v.nome }}</h4>
+                    <p style="font-size: 13px; color: var(--text-muted);">Dia {{ v.dia }}</p>
                 </div>
             </div>
-        </div>
-
-        <div style="padding-bottom: 100px;">
-            <div class="section-title">Amigos Pendentes</div>
-            <div class="list-container">
-                
-                <div class="list-item">
-                    <div class="item-main-row">
-                        <div class="item-left">
-                            <div class="avatar" style="width: 44px; height: 44px; font-size: 0.9rem; background: var(--surface);">JP</div>
-                            <div>
-                                <div class="item-name">João Pedro</div>
-                                <div class="item-desc">Spotify Premium</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-value" style="color: var(--danger);">R$ 10,95</div>
-                            <div class="item-desc" style="color: var(--danger);">Devendo</div>
-                        </div>
-                    </div>
-                    
-                    <button class="btn-remind" onclick="alert('Lembrete enviado para João Pedro no WhatsApp!')">
-                        🔔 Enviar Lembrete Agora
-                    </button>
-                </div>
-
+            <div style="text-align: right;">
+                <h4>R$ {{ v.valor_total|floatformat:2 }}</h4>
+                <p style="font-size: 12px; color: {% if v.pendentes_count > 0 %}var(--danger){% else %}var(--success){% endif %};">
+                    {{ v.pendentes_count }} pendente(s)
+                </p>
             </div>
         </div>
+    </div>
+    {% endfor %}
 
-        <button class="fab-button" id="openModalBtn">+ Adicionar Assinatura</button>
+    <button class="fab-button" onclick="document.getElementById('modal').classList.add('active')">+ Adicionar Assinatura</button>
+</div>
+
+<div class="modal-overlay" id="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 20px;">Nova Assinatura</h3>
+       <form method="POST" action="{% url 'criarGrupo' %}">
+    {% csrf_token %}
+    
+    <div class="form-group">
+        <label>Nome do Grupo</label>
+        <input type="text" name="name" placeholder="Ex: Família Netflix" required>
     </div>
 
-    <div class="modal-overlay" id="modalNovaAssinatura">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Nova Assinatura</div>
-                <button class="close-modal" id="closeModalBtn">&times;</button>
-            </div>
+    <div class="form-group">
+        <label>Descrição</label>
+        <input type="text" name="descricao" placeholder="Ex: Divisão mensal" required>
+    </div>
 
-            <form method="POST" action="{% url 'criarGrupo' %}">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <label for="name">Nome do Grupo</label>
-                    <input type="text" id="name" name="name" placeholder="Ex: Família Spotify" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="descricao">Descrição</label>
-                    <input type="text" id="descricao" name="descricao" placeholder="Ex: Dividido com 4 pessoas" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="streaming">Streaming</label>
-                    <select id="streaming" name="streaming" required>
-                        <option value="" disabled selected>Selecione um serviço...</option>
-                        {% for s in streamings %}
-                            <option value="{{ s.id }}">{{ s.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="plano">Plano</label>
-                    <select id="plano" name="plano" required>
-                        <option value="" disabled selected>Selecione um plano...</option>
-                        {% for p in planos %}
-                            <option value="{{ p.id }}">{{ p.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-submit">Criar Grupo</button>
-            </form>
+    <div style="display: flex; gap: 12px;">
+        <div class="form-group" style="flex: 1;">
+            <label>Streaming</label>
+            <select name="streaming" required>
+                {% for s in streamings %}
+                    <option value="{{ s.id }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>Plano</label>
+            <select name="plano" required>
+                {% for p in planos %}
+                    <option value="{{ p.id }}">{{ p.name }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
-    <script>
-        const modal = document.getElementById('modalNovaAssinatura');
-        const openBtn = document.getElementById('openModalBtn');
-        const closeBtn = document.getElementById('closeModalBtn');
+    <div class="form-group">
+        <label>Dia de Vencimento (1 a 31)</label>
+        <input type="number" name="dia_vencimento" value="15" min="1" max="31" required>
+    </div>
 
-        // Abre o modal
-        openBtn.addEventListener('click', () => {
-            modal.classList.add('active');
-        });
+    <div class="automation-row" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; background: #1A1A1A; padding: 12px; border-radius: 12px;">
+        <span style="font-size: 14px; color: #888;">Cobrança Automática</span>
+        <label class="switch">
+            <input type="checkbox" name="cobranca_automatica" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
 
-        // Fecha o modal ao clicar no botão X
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
+    <button type="submit" class="fab-button" style="position: relative; width: 100%;">Criar Grupo</button>
+</form>
+    </div>
+</div>
 
-        // Fecha o modal ao clicar fora da caixa de conteúdo (no fundo escuro)
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
-        });
-    </script>
+<script>
+    // Fechar modal ao clicar fora
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('modal')) document.getElementById('modal').classList.remove('active');
+    }
+</script>
+
 </body>
 </html>

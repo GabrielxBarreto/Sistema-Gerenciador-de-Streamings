@@ -147,7 +147,7 @@
             <p>Acesse sua conta para continuar.</p>
         </div>
 
-        <form method="POST" action='{% url "api/users/logUsers" %}'>
+        <form method="POST" action='{% url "login" %}'>
             {% csrf_token %}
             <div class="form-group">
                 <div class="label-container">

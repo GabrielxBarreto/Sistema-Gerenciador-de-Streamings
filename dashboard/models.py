@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(models.Model):
     #o jeito Django de classes abstratas 
@@ -29,15 +29,35 @@ class Plano(models.Model):
     quantidade_telas = models.IntegerField()
     anuncio = models.BooleanField()
 
-class Participante(User):
+class Participante(AbstractUser):
     data_cadastro= models.DateField(auto_now_add=True)
     status = models.BooleanField(default=True) 
+    def __str__(self):
+            return self.username
 
 class Grupo(models.Model):
+    owner = models.ForeignKey(Participante, on_delete=models.CASCADE, related_name="meus_grupos")
     name = models.CharField(max_length=45)
-    descricao = models.CharField(max_length=255)
+    descricao = models.CharField(max_length=255, blank=True, null=True)
     plano = models.ForeignKey(Plano, on_delete=models.CASCADE)
     streaming = models.ForeignKey(Streaming, on_delete=models.CASCADE)
-
-
+    dia_vencimento = models.IntegerField(default=15) # Novo: Dia do mês que a conta vence
+    cobranca_automatica = models.BooleanField(default=True) # Novo: Toggle do app
     
+    # Novo: Relação de quem faz parte do grupo para dividir a conta
+    membros = models.ManyToManyField(Participante, through='MembroGrupo', related_name="grupos_participo")
+
+    def __str__(self):
+        return self.name
+
+# Novo: Tabela intermédia para gerir se o amigo já pagou este mês
+class MembroGrupo(models.Model):
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    participante = models.ForeignKey(Participante, on_delete=models.CASCADE)
+    status_pagamento = models.BooleanField(default=False) # False = Pendente/Devendo, True = Pago
+    
+    @property
+    def valor_devido(self):
+        # Divide o valor total pelo número de membros + o dono
+        total_pessoas = self.grupo.membros.count() + 1 
+        return self.grupo.plano.preco_mensal / total_pessoas

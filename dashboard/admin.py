@@ -18,4 +18,4 @@ class ParticipanteAdmin(admin.ModelAdmin):
 
 @admin.register(models.Grupo)
 class GrupoAdmin(admin.ModelAdmin):
-    list_display = 'id','name','descricao','plano','streaming'
+    list_display = 'id','name','descricao','plano','streaming','owner'
