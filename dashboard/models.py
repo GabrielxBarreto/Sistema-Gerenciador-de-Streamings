@@ -28,6 +28,8 @@ class Plano(models.Model):
     ativo = models.BooleanField()
     quantidade_telas = models.IntegerField()
     anuncio = models.BooleanField()
+    #Barreto: adicionei a forgein key para o streaming, pois cada plano pertence a um streaming específico
+    streaming = models.ForeignKey(Streaming, on_delete=models.CASCADE, default=1, null = True,blank=True)
 
 class Participante(AbstractUser):
     data_cadastro= models.DateField(auto_now_add=True)

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -74,7 +75,6 @@
                 margin-bottom: 40px;
             }
 
-            /* Transforma o layout linear em duas colunas organizadas */
             .dashboard-grid {
                 display: grid;
                 grid-template-columns: 320px 1fr;
@@ -93,7 +93,6 @@
                 margin: 12px 0 16px 0;
             }
 
-            /* Redimensiona o FAB para virar um botão clássico de desktop no canto inferior */
             .fab-button {
                 position: fixed;
                 bottom: 40px;
@@ -106,7 +105,6 @@
                 border-radius: 50px;
             }
 
-            /* Centraliza o modal no meio da tela ao invés de subir como aba */
             .modal-overlay {
                 align-items: center;
             }
@@ -127,10 +125,7 @@
         <div class="avatar">{{ user.username|make_list|first|upper }}</div>
     </header>
 
-    <!-- Estrutura de grid acionada apenas no Desktop -->
     <div class="dashboard-grid">
-        
-        <!-- Coluna Esquerda: Dados Financeiros -->
         <div class="side-panel">
             <section class="total-card">
                 <p style="color: var(--text-muted);">Seu gasto total</p>
@@ -139,7 +134,6 @@
             </section>
         </div>
 
-        <!-- Coluna Direita: Lista Expandida de Vencimentos -->
         <div class="content-panel">
             <h3 class="section-title">Próximos Vencimentos</h3>
             
@@ -147,7 +141,16 @@
             <div class="item-card">
                 <div class="item-row">
                     <div class="item-info">
-                        <div class="item-icon">📺</div>
+                        
+                        <div class="item-icon" style="overflow: hidden;">
+                            {% if v.nome == 'Netflix' %}
+                                <img src="{% static 'icons/Netflix.png' %}" alt="Netflix" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% elif v.nome == 'Spotify' %}
+                                <img src="{% static 'icons/spotify.png' %}" alt="Spotify" style="width: 100%; height: 100%; object-fit: cover;">
+                            {% else %}
+                                <span>📺</span>
+                            {% endif %}
+                        </div>
                         <div>
                             <h4 style="font-size: 16px;">{{ v.nome }}</h4>
                             <p style="font-size: 13px; color: var(--text-muted);">Dia {{ v.dia }}</p>
@@ -169,13 +172,12 @@
             <p style="color: var(--text-muted); text-align: center; margin-top: 20px;">Nenhum grupo criado ainda.</p>
             {% endfor %}
         </div>
-
-    </div> <!-- Fim da grid -->
+    </div>
 
     <button class="fab-button" onclick="document.getElementById('modal').classList.add('active')">+ Adicionar Assinatura</button>
 </div>
 
-<!-- Estrutura do Modal Invisível -->
+<!-- Modal -->
 <div class="modal-overlay" id="modal">
     <div class="modal-content">
         <h3 style="margin-bottom: 20px;">Nova Assinatura</h3>
@@ -192,10 +194,14 @@
                 <input type="text" name="descricao" placeholder="Ex: Divisão mensal" required>
             </div>
 
+            <!-- TRECHO SUBSTITUÍDO -->
             <div style="display: flex; gap: 12px;">
                 <div class="form-group" style="flex: 1;">
                     <label>Streaming</label>
-                    <select name="streaming" required>
+                    <!-- Adicionamos o id="id_streaming" e o data-url -->
+                    <select name="streaming" id="id_streaming" data-url="{% url 'ajax_carregar_planos' %}" required>
+                        <option value="">Selecione...</option>
+                        
                         {% for s in streamings %}
                             <option value="{{ s.id }}">{{ s.name }}</option>
                         {% endfor %}
@@ -203,13 +209,13 @@
                 </div>
                 <div class="form-group" style="flex: 1;">
                     <label>Plano</label>
-                    <select name="plano" required>
-                        {% for p in planos %}
-                            <option value="{{ p.id }}">{{ p.name }}</option>
-                        {% endfor %}
+                    <!-- Adicionamos o id="id_plano" e removemos o loop do Django -->
+                    <select name="plano" id="id_plano" required>
+                        <option value="">Escolha o streaming primeiro</option>
                     </select>
                 </div>
             </div>
+            <!-- ================== -->
 
             <div class="form-group">
                 <label>Dia de Vencimento (1 a 31)</label>
@@ -236,6 +242,40 @@
             document.getElementById('modal').classList.remove('active');
         }
     }
+
+    // Lógica para filtrar planos baseada no streaming selecionado
+    document.getElementById('id_streaming').addEventListener('change', function() {
+        const streamingId = this.value;
+        const url = this.getAttribute('data-url');
+        const planoSelect = document.getElementById('id_plano');
+
+        // Limpa o select de planos
+        planoSelect.innerHTML = '<option value="">Carregando...</option>';
+
+        if (!streamingId) {
+            planoSelect.innerHTML = '<option value="">Escolha o streaming primeiro</option>';
+            return;
+        }
+
+        // Faz a requisição AJAX para a view do Django
+        fetch(`${url}?streaming_id=${streamingId}`)
+            .then(response => response.json())
+            .then(data => {
+                planoSelect.innerHTML = '<option value="">Selecione o plano</option>';
+                
+                // Popula o select com os planos retornados pelo servidor
+                data.forEach(plano => {
+                    const option = document.createElement('option');
+                    option.value = plano.id;
+                    option.textContent = plano.name;
+                    planoSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erro ao buscar planos:', error);
+                planoSelect.innerHTML = '<option value="">Erro ao carregar planos</option>';
+            });
+    });
 </script>
 
 </body>

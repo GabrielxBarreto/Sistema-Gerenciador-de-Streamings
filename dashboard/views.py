@@ -53,6 +53,12 @@ def logout_view(request):
     django_logout(request)
     return redirect('index')
 
+def carregar_planos(request):
+    streaming_id = request.GET.get('streaming_id')
+    # Filtra os planos onde a chave estrangeira do streaming bate com o ID enviado
+    planos = models.Plano.objects.filter(streaming_id=streaming_id).values('id', 'name')
+    return JsonResponse(list(planos), safe=False)
+
 # ==================== ÁREA LOGADA ====================
 
 @login_required(login_url='/login/')

@@ -11,6 +11,8 @@ urlpatterns = [
     # Área Logada
     path('dashboard/', views.dashboard, name='dashboard'),
     path('criarGrupo/', views.criarGrupo, name='criarGrupo'),
+    #carregando os planos em tempo real com AJAX
+    path('ajax/carregar-planos/', views.carregar_planos, name='ajax_carregar_planos'),
     # No seu urls.py, adicione essa linha junto com as outras:
     path('grupo/entrar/<int:grupo_id>/', views.entrar_grupo, name='entrar_grupo'),
 
