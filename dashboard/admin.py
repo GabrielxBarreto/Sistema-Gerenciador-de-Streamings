@@ -15,7 +15,7 @@ class PlanoAdmin(admin.ModelAdmin):
 
 @admin.register(models.Participante)
 class ParticipanteAdmin(admin.ModelAdmin):
-    list_display = 'id','username','email','data_cadastro','status'
+    list_display = 'id','username','password','email','data_cadastro','status'
 
 @admin.register(models.Grupo)
 class GrupoAdmin(admin.ModelAdmin):
