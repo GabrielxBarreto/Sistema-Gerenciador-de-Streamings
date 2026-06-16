@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
     <title>SubSplit - Gestão de Assinaturas</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -187,7 +188,15 @@
     </style>
 </head>
 <body>
-
+<div id="install-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background-color: var(--surface, #1F1F1F); border: 1px solid var(--accent, #A855F7); border-radius: 16px; padding: 16px; z-index: 9999; box-shadow: 0 8px 32px rgba(0,0,0,0.5); text-align: center;">
+    <div style="font-size: 24px; margin-bottom: 8px;">📲</div>
+    <h3 style="margin-bottom: 8px; font-size: 16px;">Instale o SubSplit</h3>
+    <p style="font-size: 13px; color: var(--text-muted, #888); margin-bottom: 16px;">Adicione à tela inicial para acessar seus grupos de forma mais rápida!</p>
+    <div style="display: flex; gap: 10px;">
+        <button id="btn-cancel-install" style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: #333; color: white; cursor: pointer;">Agora não</button>
+        <button id="btn-install" style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: var(--accent, #A855F7); color: white; font-weight: bold; cursor: pointer;">Instalar</button>
+    </div>
+</div>
 <div class="app-container">
     <header>
         <h1>Olá, {{ user.username|title }}</h1>
@@ -433,7 +442,42 @@
         </form>
     </div>
 </div>
+<script>
+    // 1. Registra o Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register("{% static 'sw.js' %}");
+    }
 
+    // 2. Lógica para capturar e exibir a notificação de instalação
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const btnInstall = document.getElementById('btn-install');
+    const btnCancel = document.getElementById('btn-cancel-install');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Previne o navegador de mostrar o prompt padrão dele
+        e.preventDefault();
+        // Salva o evento para ser acionado depois
+        deferredPrompt = e;
+        // Mostra o nosso banner customizado
+        installBanner.style.display = 'block';
+    });
+
+    btnInstall.addEventListener('click', async () => {
+        // Esconde o nosso banner
+        installBanner.style.display = 'none';
+        // Mostra o prompt oficial de instalação do navegador
+        deferredPrompt.prompt();
+        // Aguarda o usuário responder se instalou ou não
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+        deferredPrompt = null;
+    });
+
+    btnCancel.addEventListener('click', () => {
+        installBanner.style.display = 'none';
+    });
+</script>
 <script>
     // Fechar modal ao clicar fora da área interna
     window.onclick = function(event) {
