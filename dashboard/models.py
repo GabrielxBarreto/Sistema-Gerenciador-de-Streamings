@@ -49,7 +49,7 @@ class Grupo(models.Model):
     assinatura_paga = models.BooleanField(default=False)
     # Novo: Relação de quem faz parte do grupo para dividir a conta
     membros = models.ManyToManyField(Participante, through='MembroGrupo', related_name="grupos_participo")
-
+    ocultar_membros = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 

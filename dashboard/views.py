@@ -84,7 +84,9 @@ def dashboard(request):
             'dono': grupo_alheio.owner.username,
             'dia_vencimento': grupo_alheio.dia_vencimento,
             'minha_parte': f"{minha_parte:.2f}".replace('.', ','),
-            'status_pagamento': vinculo.status_pagamento
+            'status_pagamento': vinculo.status_pagamento,
+            'ocultar_membros': grupo_alheio.ocultar_membros,
+            'membros': membros_desse_grupo
         })
 
     # Cálculos Financeiros
@@ -144,12 +146,14 @@ def dashboard(request):
 @login_required(login_url='/login/')
 def criarGrupo(request):
     if request.method == 'POST':
+        ocultar_membros = request.POST.get('ocultar_membros') == 'on'
         grupo = models.Grupo.objects.create(
             owner=request.user, # Pega o usuário logado com segurança
             name=request.POST.get('name'),
             descricao=request.POST.get('descricao'),
             plano_id=request.POST.get('plano'),
-            streaming_id=request.POST.get('streaming')
+            streaming_id=request.POST.get('streaming'),
+            ocultar_membros=ocultar_membros
         )
         grupo.save()
     return redirect("dashboard")

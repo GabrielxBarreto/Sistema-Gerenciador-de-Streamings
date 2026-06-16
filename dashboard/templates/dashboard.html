@@ -287,7 +287,7 @@
             <h3 class="section-title" style="margin-top: 40px;">Assinaturas que eu Participo</h3>
             
             {% for g in grupos_participando %}
-            <div class="item-card" style="border-left: 3px solid var(--accent);">
+            <div class="item-card" style="border-left: 3px solid var(--accent); padding-bottom: 20px;">
                 <div class="item-row">
                     <div class="item-info">
                         <div class="item-icon">📺</div>
@@ -303,7 +303,27 @@
                         </p>
                     </div>
                 </div>
-            </div>
+
+                <div style="margin-top: 16px; border-top: 1px solid var(--surface); padding-top: 12px;">
+                    {% if not g.ocultar_membros %}
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Outros participantes neste grupo:</p>
+                        {% for parceiro in g.membros %}
+                            {% if parceiro.participante != user %}
+                                <div style="font-size: 14px; color: #bbb; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                                    <span>👤 {{ parceiro.participante.username }}</span>
+                                    <span style="font-size: 12px; color: var(--text-muted);">🔥 {{ parceiro.streak }}</span>
+                                </div>
+                            {% endif %}
+                        {% empty %}
+                            <p style="font-size: 12px; color: var(--text-muted);">Apenas você e o dono estão aqui.</p>
+                        {% endfor %}
+                    {% else %}
+                        <p style="font-size: 12px; color: var(--text-muted); font-style: italic; display: flex; align-items: center; gap: 4px;">
+                            🔒 A lista de participantes foi ocultada pelo dono.
+                        </p>
+                    {% endif %}
+                </div>
+                </div>
             {% empty %}
             <p style="color: var(--text-muted); text-align: center; margin-top: 20px; font-size: 14px;">Você não participa de nenhuma assinatura de amigos ainda.</p>
             {% endfor %}
@@ -363,6 +383,14 @@
                 <span style="font-size: 14px; color: #888;">Cobrança Automática</span>
                 <label class="switch">
                     <input type="checkbox" name="cobranca_automatica" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="automation-row" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; background: #1A1A1A; padding: 12px; border-radius: 12px;">
+                <span style="font-size: 14px; color: #888;">Ocultar membros dos participantes</span>
+                <label class="switch">
+                    <input type="checkbox" name="ocultar_membros">
                     <span class="slider"></span>
                 </label>
             </div>
