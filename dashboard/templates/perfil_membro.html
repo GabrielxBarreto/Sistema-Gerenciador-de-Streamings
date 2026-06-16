@@ -1,79 +1,224 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SubSplit - Perfil de {{ membro.username }}</title>
     <style>
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 40px;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-color: #0A0A0A;
+            --card-bg: #141414;
+            --surface: #1F1F1F;
+            --text-main: #FFFFFF;
+            --text-muted: #8E8E93;
+            --accent: #A855F7;
+            --accent-dim: rgba(168, 85, 247, 0.15);
+            --danger: #EF4444;
+            --danger-dim: rgba(239, 68, 68, 0.1);
+            --success: #22C55E;
+            --success-dim: rgba(34, 197, 94, 0.1);
         }
-        .container-perfil {
-            background-color: #121212;
-            border: 1px solid #7c3aed; /* Roxo elétrico */
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 600px;
-            margin: 0 auto;
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif; 
         }
+
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px 20px;
+        }
+
+        /* Container do Perfil */
+        .profile-container { 
+            background-color: var(--card-bg); 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        /* Avatar Header */
+        .avatar-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
         .avatar-placeholder {
-            width: 80px;
-            height: 80px;
-            background-color: #7c3aed;
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(135deg, var(--accent), #7C3AED);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 36px;
+            font-weight: 700;
+            color: #FFFFFF;
+            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.3);
         }
-        .info-grupo {
-            color: #a78bfa;
-            margin-bottom: 20px;
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
-        .btn-voltar {
-            display: inline-block;
-            background-color: transparent;
-            color: #7c3aed;
-            border: 1px solid #7c3aed;
-            padding: 10px 20px;
-            border-radius: 8px;
+
+        .user-email {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        /* Seções de Informação */
+        .info-section {
+            background-color: var(--surface);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .info-row:first-child {
+            padding-top: 0;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* Status Badges */
+        .badge {
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-success {
+            background-color: var(--success-dim);
+            color: var(--success);
+        }
+
+        .badge-danger {
+            background-color: var(--danger-dim);
+            color: var(--danger);
+        }
+
+        /* Botão Voltar */
+        .btn-back {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background-color: var(--surface);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px;
+            border-radius: 14px;
             text-decoration: none;
-            margin-top: 25px;
-            transition: 0.3s;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
-        .btn-voltar:hover {
-            background-color: #7c3aed;
-            color: #fff;
+
+        .btn-back:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 
-    <div class="container-perfil">
-        <div class="avatar-placeholder">
-            {{ membro.username|slice:":1"|upper }}
+    <div class="profile-container">
+        <div class="avatar-wrapper">
+            <div class="avatar-placeholder">
+                {{ membro.username|slice:":1"|upper }}
+            </div>
         </div>
         
-        <h1>Perfil de {{ membro.username }}</h1>
-        <p><strong>E-mail:</strong> {{ membro.email }}</p>
+        <h1>{{ membro.username|title }}</h1>
+        <p class="user-email">{{ membro.email }}</p>
         
-        <div class="info-grupo">
-            <h3>Informações no Grupo: {{ grupo.streaming.name }}</h3>
-            <p><strong>Status do Pagamento Atual:</strong> 
-                {% if vinculo.status_pagamento %}
-                    <span style="color: #10b981;">Pago 🟢</span>
-                {% else %}
-                    <span style="color: #ef4444;">Pendente 🔴</span>
-                {% endif %}
-            </p>
-            <p><strong>Valor Devido:</strong> R$ {{ vinculo.valor_devido }}</p>
+        <div class="info-section">
+            <h3 class="section-title">Assinatura Ativa</h3>
+            
+            <div class="info-row">
+                <span class="info-label">Grupo</span>
+                <span class="info-value">{{ grupo.streaming.name }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Status Financeiro</span>
+                <span>
+                    {% if vinculo.status_pagamento %}
+                        <span class="badge badge-success">● Pago</span>
+                    {% else %}
+                        <span class="badge badge-danger">● Pendente</span>
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Valor da Cota</span>
+                <span class="info-value" style="color: var(--accent); font-weight: 600;">
+                    R$ {{ vinculo.valor_devido }}
+                </span>
+            </div>
         </div>
 
-        <a href="{% url 'dashboard' %}" class="btn-voltar">← Voltar para Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="btn-back">
+            <span>←</span> Voltar para Dashboard
+        </a>
     </div>
 
 </body>
