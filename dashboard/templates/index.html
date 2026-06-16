@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início - App de Assinaturas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #050505; 
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Barra de Navegação Superior */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #A855F7, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-login {
+            color: #A0A0A0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .btn-login:hover {
+            color: #FFFFFF;
+        }
+
+        .btn-cta-nav {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            border: 1px solid #333;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-cta-nav:hover {
+            background: #222222;
+            border-color: #9B51E0;
+        }
+
+        /* Seção Principal (Hero) */
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(135deg, #A855F7, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            color: #A0A0A0;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 480px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #A855F7, #8B5CF6);
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 16px;
+            padding: 18px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-block;
+            transition: opacity 0.2s;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Grid de Funcionalidades (Simulando o App) */
+        .hero-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: #1A1A1A;
+            border: 1px solid #262626;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-card .icon {
+            font-size: 24px;
+            background: rgba(168, 85, 247, 0.1);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            color: #A855F7;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #A0A0A0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Footer sutil */
+        footer {
+            text-align: center;
+            padding: 24px;
+            color: #444444;
+            font-size: 12px;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+            }
+            main {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 20px;
+                text-align: center;
+            }
+            .hero-text h1 {
+                font-size: 36px;
+            }
+            .hero-text p {
+                margin: 0 auto 32px auto;
+            }
+            .hero-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">SubSplit.</div>
+        <div class="nav-buttons">
+            <a href="{% url 'login' %}" class="btn-login">Entrar</a>
+            <a href="{% url 'cadastro' %}" class="btn-cta-nav">Criar Conta</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero-text">
+            <h1>Todas as suas assinaturas. <span>Um só lugar.</span></h1>
+            <p>Monitore vencimentos, gerencie streamings e divida o valor das contas com seus amigos de forma automatizada e sem estresse.</p>
+            <a href="{% url 'login' %}" class="btn-primary">Começar Agora — É Grátis</a>
+        </div>
+
+        <div class="hero-visual">
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Controle Total</h3>
+                <p>Visualize todos os seus gastos mensais com serviços de streaming em um único painel dinâmico.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="icon">👥</div>
+                <h3>Grupos de Divisão</h3>
+                <p>Divida o valor do plano premium com seus amigos. Cada um paga a sua parte direto pelo app.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🔔</div>
+                <h3>Alertas Inteligentes</h3>
+                <p>Esqueça as surpresas na fatura. Receba avisos antes que a renovação automática aconteça.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h3>100% Seguro</h3>
+                <p>Dados criptografados para garantir que a gestão dos seus planos seja segura e privada.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 SubSplit. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>
