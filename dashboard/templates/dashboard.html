@@ -63,7 +63,45 @@
         
         /* Botão de Ação Flutuante (Mobile) */
         .fab-button { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 432px; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 600; cursor: pointer; z-index: 10; box-shadow: 0 8px 24px rgba(168, 85, 247, 0.2); }
+.streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff3d00, #ff9800, #ffd600);
+    color: #111;
+    font-size: 18px;
+    font-weight: 800;
+    box-shadow: 0 0 18px rgba(255, 115, 0, 0.8);
+    animation: firePulse 1.2s infinite alternate;
+}
 
+.streak-fire {
+    font-size: 26px;
+    animation: fireShake 0.8s infinite alternate;
+}
+
+@keyframes firePulse {
+    from {
+        transform: scale(1);
+        box-shadow: 0 0 12px rgba(255, 115, 0, 0.6);
+    }
+    to {
+        transform: scale(1.08);
+        box-shadow: 0 0 28px rgba(255, 180, 0, 1);
+    }
+}
+
+@keyframes fireShake {
+    from {
+        transform: rotate(-6deg) scale(1);
+    }
+    to {
+        transform: rotate(6deg) scale(1.15);
+    }
+}
         /* ==================== ADAPTAÇÃO PARA COMPUTADOR (DESKTOP) ==================== */
         @media (min-width: 768px) {
             .app-container {
@@ -155,8 +193,13 @@
                         </div>
                         <div>
                             <h4 style="font-size: 16px;">
-                              {{ v.nome }} 🔥 {{ v.streak_pagamentos }}
-                            </h4>
+                              {{ v.nome }}
+
+                             <span class="streak-badge">
+                              <span class="streak-fire">🔥</span>
+                                  {{ v.streak_pagamentos }}
+                              </span>
+                                       </h4>
                             <p style="font-size: 13px; color: var(--text-muted);">Dia {{ v.dia }}</p>
                         </div>
                     </div>
