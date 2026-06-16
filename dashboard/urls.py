@@ -21,6 +21,7 @@ urlpatterns = [
     path('pagamento/<int:membro_id>/', views.marcar_pagamento, name='marcar_pagamento'
 ),
     path('membro/<int:membro_id>/', views.detalhe_membro, name='detalhe_membro'),
+    path('membro/<int:membro_id>/remover/', views.remover_membro, name='remover_membro'),
     # APIs e Testes
     path('api/users/', views.listUsers, name='api_users'),
     path('api/users/updateUser/<int:id>/', views.updateUser, name='updateUser'),

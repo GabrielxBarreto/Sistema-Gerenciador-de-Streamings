@@ -247,3 +247,22 @@ def marcar_pagamento(request, membro_id):
         grupo.save()
 
     return redirect('dashboard')
+
+@login_required(login_url='/login/')
+def remover_membro(request, membro_id):
+    membro_grupo = get_object_or_404(models.MembroGrupo, id=membro_id)
+
+    # Segurança: Garante que apenas o OWNER do grupo pode remover alguém
+    if membro_grupo.grupo.owner != request.user:
+        messages.error(request, "Você não tem permissão para remover este participante.")
+        return redirect('dashboard')
+    
+    # Guarda o nome antes de deletar para exibir na mensagem
+    nome_usuario = membro_grupo.participante.username
+    nome_streaming = membro_grupo.grupo.streaming.name
+
+    # Remove o participante do grupo
+    membro_grupo.delete()
+    
+    messages.success(request, f"{nome_usuario} foi removido do grupo do {nome_streaming}.")
+    return redirect('dashboard')
