@@ -202,26 +202,38 @@ def detalhe_grupo(request, grupo_id):
     grupo = get_object_or_404(models.Grupo, id=grupo_id)
     membros = models.MembroGrupo.objects.filter(grupo=grupo)
 
-    # Segurança: só o dono ou membros do grupo podem ver
     usuario_eh_dono = grupo.owner == request.user
-    usuario_eh_membro = membros.filter(participante=request.user).exists()
+    vinculo_usuario = membros.filter(participante=request.user).first()
+    usuario_eh_membro = vinculo_usuario is not None
 
     if not usuario_eh_dono and not usuario_eh_membro:
         messages.error(request, "Você não tem permissão para acessar este grupo.")
         return redirect('dashboard')
 
-    total_pessoas = membros.count() + 1
+    total_membros = membros.count()
+    total_pessoas = total_membros + 1
     valor_por_pessoa = grupo.plano.preco_mensal / total_pessoas
+
+    membros_pagos = membros.filter(status_pagamento=True).count()
+    membros_pendentes = membros.filter(status_pagamento=False).count()
 
     context = {
         'grupo': grupo,
         'membros': membros,
         'usuario_eh_dono': usuario_eh_dono,
+        'usuario_eh_membro': usuario_eh_membro,
+        'vinculo_usuario': vinculo_usuario,
         'valor_por_pessoa': valor_por_pessoa,
+        'total_pessoas': total_pessoas,
+        'membros_pagos': membros_pagos,
+        'membros_pendentes': membros_pendentes,
+
+        'link_convite': request.build_absolute_uri(
+        f"/grupo/entrar/{grupo.id}/"
+    ),
     }
 
     return render(request, 'detalhe_grupo.html', context)
-
 # ==================== API / CRUD RÁPIDO ====================
 
 def cobrar_amigo(request,email):
@@ -238,6 +250,51 @@ def cobrar_amigo(request,email):
         except Exception as e:
             return HttpResponse(f"Erro: {e}")
 
+@login_required(login_url='/login/')
+def cobrar_participantes(request, grupo_id):
+    grupo = get_object_or_404(models.Grupo, id=grupo_id)
+
+    if grupo.owner != request.user:
+        messages.error(request, "Você não tem permissão para cobrar participantes deste grupo.")
+        return redirect('dashboard')
+
+    membros_pendentes = models.MembroGrupo.objects.filter(
+        grupo=grupo,
+        status_pagamento=False
+    )
+
+    enviados = 0
+    sem_email = 0
+
+    for membro in membros_pendentes:
+        email = membro.participante.email
+
+        if email:
+            try:
+                send_mail(
+                    subject=f'Lembrete de pagamento - {grupo.streaming.name}',
+                    message=(
+                        f'Olá, {membro.participante.username}.\n\n'
+                        f'Sua parte da assinatura do grupo "{grupo.name}" ainda está pendente.\n'
+                        f'Valor aproximado: R$ {membro.valor_devido:.2f}.\n\n'
+                        f'Acesse o SubSplit para regularizar seu pagamento.'
+                    ),
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+                enviados += 1
+            except Exception as e:
+                messages.error(request, f"Erro ao enviar para {email}: {e}")
+        else:
+            sem_email += 1
+
+    messages.success(
+        request,
+        f"Cobrança enviada para {enviados} participante(s). {sem_email} participante(s) sem email."
+    )
+
+    return redirect('detalhe_grupo', grupo_id=grupo.id)
 
 def listUsers(request):
     users = list(models.Participante.objects.values('id', 'username', 'email'))
@@ -315,7 +372,7 @@ def alternar_pagamento(request, membro_id):
         if grupo.streak_pagamentos > 0:
             grupo.streak_pagamentos -= 1
     grupo.save()
-    return redirect('dashboard')
+    return redirect('detalhe_grupo', grupo_id=grupo.id)
 
 @login_required(login_url='/login/')
 def remover_membro(request, membro_id):

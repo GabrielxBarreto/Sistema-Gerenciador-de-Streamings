@@ -135,6 +135,44 @@
     <div class="member-card">
         <h2>Participantes</h2>
 
+<div class="info-box">
+    <p class="muted">Pagos</p>
+    <h3>{{ membros_pagos }}</h3>
+</div>
+
+<div class="info-box">
+    <p class="muted">Pendentes</p>
+    <h3>{{ membros_pendentes }}</h3>
+</div>
+        </div>
+
+    {% if usuario_eh_dono %}
+        <div class="group-card">
+            <h2>Gerenciamento</h2>
+
+            <div class="owner-actions" style="margin-top: 16px;">
+               <button type="button" class="btn btn-dark" onclick="navigator.clipboard.writeText('{{ link_convite }}').then(() => alert('Link copiado!'));" style="border: none; cursor: pointer;">
+             Copiar link
+         </button>
+               <a class="btn btn-dark" href="{% url 'cobrar_participantes' grupo.id %}" onclick="return confirm('Enviar cobrança para todos os participantes pendentes?');"> Cobrar participantes </a>
+                <a class="btn btn-dark" href="#">Editar grupo</a>
+                <a class="btn btn-danger" href="#">Excluir grupo</a>
+            </div>
+        </div>
+    {% elif usuario_eh_membro %}
+        <div class="group-card">
+            <h2>👤 Minha Área</h2>
+
+            <div class="owner-actions" style="margin-top: 16px;">
+                <a class="btn btn-dark" href="#">Meu pagamento</a>
+                <a class="btn btn-danger" href="#">Sair do grupo</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="member-card">
+        <h2>Participantes</h2>
+
         {% for membro in membros %}
             <div class="member-row">
                 <div>
@@ -143,18 +181,35 @@
                 </div>
 
                 <div>
-                    {% if membro.status_pagamento %}
-                        <span class="paid">Pago ✅</span>
-                    {% else %}
-                        <span class="pending">Pendente</span>
-                    {% endif %}
+                   <a href="{% url 'alternar_pagamento' membro.id %}" style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
+
+    <span class="{% if membro.status_pagamento %}paid{% else %}pending{% endif %}"></span>  {% if membro.status_pagamento %}  Pago  {% else %}  Pendente {% endif %} </span>
+
+        <input type="checkbox"
+           {% if membro.status_pagamento %}checked{% endif %} onclick="event.preventDefault(); this.parentElement.click();">
+         </a>
                 </div>
 
                 {% if usuario_eh_dono %}
                     <div class="owner-actions">
-                        <a class="btn btn-dark" href="{% url 'detalhe_membro' membro.id %}">Ver</a>
-                        <a class="btn btn-danger" href="{% url 'remover_membro' membro.id %}">Remover</a>
-                    </div>
+                       <a class="btn btn-dark" href="{% url 'detalhe_membro' membro.id %}">Ver</a>
+
+                     {% if membro.participante.email %}
+                       <a class="btn btn-dark" href="{% url 'cobrarAmigo' membro.participante.email %}">
+                    Cobrar
+                       </a>
+                    {% else %}
+                   <span class="btn btn-dark" style="opacity: 0.5; cursor: not-allowed;">
+                     Sem email
+                    </span>
+                    {% endif %}
+
+                       <a class="btn btn-danger"
+                          href="{% url 'remover_membro' membro.id %}"
+                          onclick="return confirm('Tem certeza que deseja remover {{ membro.participante.username }} do grupo?');">
+                 Remover
+                       </a>
+                        </div>
                 {% endif %}
             </div>
         {% empty %}
