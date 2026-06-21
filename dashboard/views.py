@@ -151,7 +151,10 @@ def dashboard(request):
     
     return render(request, 'dashboard.html', context)
 
+import resend
+import os
 
+resend.api_key = os.environ.get('RESEND_API_KEY')
 @login_required(login_url='/login/')
 def cobrarAmigo(request, email):
     assunto = 'Lembrete de pagamento - Cobrança Individual'
@@ -159,18 +162,16 @@ def cobrarAmigo(request, email):
     
     if email:
         try:
-            send_mail(
-                subject=assunto,
-                message=mensagem,
-                from_email=settings.DEFAULT_FROM_EMAIL, 
-                recipient_list=[email],
-                fail_silently=False,
-            )
-            messages.success(request, f"O e-mail para {email} foi enfileirado para envio.")
+            params = {
+                "from": "onboarding@resend.dev", # Ou seu domínio verificado
+                "to": [email],
+                "subject": "Lembrete de pagamento",
+                "html": "<p>Sua parte da assinatura está pendente. Acesse o App!</p>"
+            }
+            resend.Emails.send(params)
+            messages.success(request, f"E-mail enviado para {email} via Resend.")
         except Exception as e:
-            messages.error(request, f"Erro ao tentar enviar e-mail: {str(e)}")
-    else:
-        messages.error(request, "Não foi possível enviar a cobrança: e-mail inválido.")
+            messages.error(request, f"Erro ao enviar e-mail: {e}")
     
     return redirect('dashboard')
 
