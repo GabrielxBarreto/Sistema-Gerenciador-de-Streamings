@@ -320,7 +320,7 @@ def cobrar_participantes(request, grupo_id):
                     ),
                     from_email=settings.EMAIL_HOST_USER,
                     recipient_list=[email],
-                    fail_silently=False,
+                    fail_silently=True,
                 )
                 enviados += 1
             except Exception as e:
