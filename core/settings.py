@@ -92,25 +92,40 @@ DEFAULT_FROM_EMAIL = "corpaligator@gmail.com"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+import os
+import dj_database_url
 
+# ... restante do seu settings.py ...
+
+# Configuração padrão (mantém o SQLite para desenvolvimento local se não houver URL)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    },
-    #'postgres': {
-    #   'ENGINE': 'django.db.backends.postgresql', 
-    #    'NAME': 'ncsa',
-    #    'USER': 'cilogon',
-    #    'PASSWORD': 'barreto',
-    #    'HOST': '127.0.0.1',
-    #    'PORT': '5433', 
-    #    'OPTIONS': {
-    #        'options': '-c search_path=ciloa2,public'
-    #    },
-    #}
+    }
 }
 
+# Se existir a variável DATABASE_URL (no Render), ele substitui pelo Postgres
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+# Se existir a variável DATABASE_URL (no Render), ele substitui pelo Postgres
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
