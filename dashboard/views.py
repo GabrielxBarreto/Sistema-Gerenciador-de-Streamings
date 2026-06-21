@@ -304,7 +304,7 @@ def cobrar_participantes(request, grupo_id):
                         f'Valor aproximado: R$ {membro.valor_devido:.2f}.\n\n'
                         f'Acesse o SubSplit para regularizar seu pagamento.'
                     ),
-                    from_email=settings.EMAIL_HOST_USER,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[email],
                     fail_silently=True,
                 )
