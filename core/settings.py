@@ -73,7 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-CELERY_IGNORE_RESULT = True
+
 
 # Configurações de E-mail (Exemplo com Gmail)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

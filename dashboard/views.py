@@ -168,7 +168,7 @@ def cobrarAmigo(request, email):
     mensagem = 'Verifique sua parte da assinatura do grupo que está pendente. Acesse o App para regularizar seu pagamento.'
     
     if email:
-        # Usa o .delay() para enviar a tarefa para o Celery em background
+        
         send_mail(
         subject=assunto,
         message=mensagem,
