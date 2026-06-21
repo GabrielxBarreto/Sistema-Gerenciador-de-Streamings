@@ -50,6 +50,16 @@
             padding: 14px;
         }
 
+        .box-container {
+            display: flex;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .box-container .info-box {
+            flex: 1;
+        }
+
         .member-row {
             display: flex;
             justify-content: space-between;
@@ -135,15 +145,18 @@
     <div class="member-card">
         <h2>Participantes</h2>
 
-<div class="info-box">
-    <p class="muted">Pagos</p>
+<div class="box-container">
+  <div class="info-box"> 
+    <p class="muted">Pagos</p> 
     <h3>{{ membros_pagos }}</h3>
+  </div>
+
+  <div class="info-box"> 
+    <p class="muted">Pendentes</p> 
+    <h3>{{ membros_pendentes }}</h3>
+  </div>
 </div>
 
-<div class="info-box">
-    <p class="muted">Pendentes</p>
-    <h3>{{ membros_pendentes }}</h3>
-</div>
         </div>
 
     {% if usuario_eh_dono %}
@@ -152,7 +165,7 @@
 
             <div class="owner-actions" style="margin-top: 16px;">
                <button type="button" class="btn btn-dark" onclick="navigator.clipboard.writeText('{{ link_convite }}').then(() => alert('Link copiado!'));" style="border: none; cursor: pointer;">
-             Copiar link
+             🔗Copiar link
          </button>
                <a class="btn btn-dark" href="{% url 'cobrar_participantes' grupo.id %}" onclick="return confirm('Enviar cobrança para todos os participantes pendentes?');"> Cobrar participantes </a>
                 <a class="btn btn-dark" href="#">Editar grupo</a>
