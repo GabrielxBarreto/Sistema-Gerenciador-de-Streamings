@@ -121,6 +121,7 @@ def dashboard(request):
 
         proximos_vencimentos.append({
             'id': grupo.id,
+            'nome_grupo': grupo.name,
             'nome': grupo.streaming.name,
             'dia': grupo.dia_vencimento,
             'valor_total': valor_plano,
