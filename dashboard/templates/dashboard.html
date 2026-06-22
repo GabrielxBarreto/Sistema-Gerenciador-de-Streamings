@@ -224,8 +224,9 @@
             <h3 class="section-title">Próximos Vencimentos</h3>
             
             {% for v in vencimentos %}
-            <div class="item-card">
-                <div class="item-row">
+            <div class="item-card" style="padding: 0; overflow: hidden;">
+                <a href="{% url 'detalhe_grupo' v.id %}" style="text-decoration: none; color: inherit; display: block; padding: 16px;">
+                <div class="item-row" style="margin-bottom: 0;">
                     <div class="item-info">
                         
                         <div class="item-icon" style="overflow: hidden;">
@@ -278,10 +279,8 @@
                         </p>
                     </div>
                 </div>
+                </a>
                 
-                <a class="btn-invite" href="{% url 'detalhe_grupo' v.id %}" style="margin-top: 10px; text-decoration: none;">
-                   👥 Ver detalhes do grupo
-                 </a>
             
             </div>
             {% empty %}
