@@ -290,6 +290,7 @@
             
             {% for g in grupos_participando %}
             <div class="item-card" style="border-left: 3px solid var(--accent); padding-bottom: 20px;">
+                <a href="{% url 'detalhe_grupo' g.id %}" style="text-decoration: none; color: inherit; display: block; padding: 16px;">
                 <div class="item-row">
                     <div class="item-info">
 
@@ -345,8 +346,7 @@
                         </p>
                     </div>
                 </div>
-                <a class="btn-invite"  href="{% url 'detalhe_grupo' g.id %}" style="margin-top: 10px; text-decoration: none;"> 👥 Ver detalhes do grupo </a>
-                <div style="margin-top: 16px; border-top: 1px solid var(--surface); padding-top: 12px;">  
+                </a> 
                 </div>
                 </div>
             {% empty %}
