@@ -3,15 +3,39 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ grupo.name }}</title>
 
     <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-color: #0A0A0A;
+            --card-bg: #141414;
+            --surface: #1F1F1F;
+            --text-main: #FFFFFF;
+            --text-muted: #8E8E93;
+            --accent: #A855F7;
+            --accent-dim: rgba(168, 85, 247, 0.15);
+            --danger: #EF4444;
+            --danger-dim: rgba(239, 68, 68, 0.1);
+            --success: #22C55E;
+            --success-dim: rgba(34, 197, 94, 0.1);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif; 
+        }
+
         body {
-            background: #000;
-            color: #fff;
-            font-family: Inter, Arial, sans-serif;
-            margin: 0;
-            padding: 24px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
@@ -20,34 +44,77 @@
         }
 
         .back {
-            color: #A855F7;
+            color: var(--accent);
             text-decoration: none;
             font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .back:hover {
+            opacity: 0.8;
+            transform: translateX(-2px);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 6px 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
         }
 
         .group-card, .member-card {
-            background: #111;
-            border-radius: 18px;
-            padding: 20px;
-            margin-top: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 32px;
+            margin-top: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
         }
 
         .muted {
-            color: #888;
+            color: var(--text-muted);
             font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            margin-top: 18px;
+            gap: 16px;
+            margin-top: 24px;
         }
 
         .info-box {
-            background: #1A1A1A;
-            border-radius: 14px;
-            padding: 14px;
+            background-color: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 16px 20px;
+        }
+
+        .info-box h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 4px;
         }
 
         .box-container {
@@ -61,11 +128,11 @@
         }
 
         .status-card {
-            background: #141414;
-            border: 1px solid #333;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 18px;
-            padding: 18px;
-            margin-top: 20px;
+            padding: 20px;
+            margin: 20px 0;
         }
 
         .status-card h2 {
@@ -80,10 +147,10 @@
         }
 
         .status-item {
-            background: #1F1F1F;
-            border: 1px solid #383838;
+            background-color: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 14px;
-            padding: 18px;
+            padding: 16px;
             text-align: center;
         }
 
@@ -92,21 +159,59 @@
         }
 
         .status-item h3 {
-            margin: 0;
-            font-size: 30px;
+            margin-top: 4px;
+            font-size: 32px;
+            font-weight: 700;
         }
+
+        .status-item:first-child h3 { color: var(--success); }
+        .status-item:last-child h3 { color: var(--danger); }
 
         .member-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #222;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
         .member-row:last-child {
             border-bottom: none;
         }
+
+        .member-info {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            border-radius: 99px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-success {
+            background-color: var(--success-dim);
+            color: var(--success);
+        }
+
+        .badge-danger {
+            background-color: var(--danger-dim);
+            color: var(--danger);
+        }
+
 
         .paid {
             color: #22C55E;
@@ -122,26 +227,68 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
-            background: #A855F7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--accent);
             color: white;
-            padding: 8px 12px;
-            border-radius: 10px;
+            padding: 10px 16px;
+            border-radius: 12px;
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
         .btn-danger {
-            background: #EF4444;
+            background-color: var(--danger-dim);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+
+        .btn-danger:hover {
+            background-color: var(--danger);
+            color: white;
         }
 
         .btn-dark {
-            background: #1A1A1A;
-            border: 1px solid #333;
+            background-color: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
         }
+
+        .btn-dark:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-disabled {
+            background-color: var(--surface);
+            color: var(--text-muted);
+            opacity: 0.5;
+            cursor: not-allowed;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .status-wrapper input[type="checkbox"] {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+
     </style>
 </head>
 <body>
@@ -202,10 +349,12 @@
             <h2>Gerenciamento</h2>
 
             <div class="owner-actions" style="margin-top: 16px;">
-               <button type="button" class="btn btn-dark" onclick="navigator.clipboard.writeText('{{ link_convite }}').then(() => alert('Link copiado!'));" style="border: none; cursor: pointer;">
+               <button type="button" class="btn btn-dark" onclick="navigator.clipboard.writeText('{{ link_convite }}').then(() => alert('Link copiado!'));">
              🔗Copiar link
          </button>
-               <a class="btn btn-dark" href="{% url 'cobrar_participantes' grupo.id %}" onclick="return confirm('Enviar cobrança para todos os participantes pendentes?');"> Cobrar participantes </a>
+                <a class="btn btn-dark" href="{% url 'cobrar_participantes' grupo.id %}" onclick="return confirm('Enviar cobrança para todos os participantes pendentes?');"> 
+                    Cobrar participantes 
+                </a>
                 <a class="btn btn-dark" href="{% url 'alternar_ocultar_membros' grupo.id %}">
                     {% if grupo.ocultar_membros %}
                  Mostrar membros do grupo
@@ -213,7 +362,9 @@
                  Ocultar membros do grupo
                     {% endif %}
                 </a>
-                <a class="btn btn-danger" href="{% url 'excluirGrupo' grupo.id %}" onclick="return confirm('Tem certeza que deseja excluir o grupo {{ grupo.name }}?');">Excluir grupo</a>
+                <a class="btn btn-danger" href="{% url 'excluirGrupo' grupo.id %}" onclick="return confirm('Tem certeza que deseja excluir o grupo {{ grupo.name }}?');">
+                    Excluir grupo
+                </a>
             </div>
         </div>
     {% elif usuario_eh_membro %}
@@ -230,9 +381,23 @@
     <div class="member-card">
     <h2>Participantes</h2>
 
+    <div class="status-card">
+            <span class="section-title" style="display: block; margin-bottom: 12px;">Status de Pagamento (Mês Atual)</span>
+            <div class="status-grid">
+                <div class="status-item">
+                    <p class="muted">Pagos</p>
+                    <h3>{{ membros_pagos }}</h3>
+                </div>
+                <div class="status-item">
+                    <p class="muted">Pendentes</p>
+                    <h3>{{ membros_pendentes }}</h3>
+                </div>
+            </div>
+        </div>
+
     {% if grupo.ocultar_membros and not usuario_eh_dono %}
 
-        <p class="muted">
+        <p class="muted" style="text-align: center; padding: 20px 0;">
             O proprietário deste grupo optou por ocultar a lista de participantes.
         </p>
 
@@ -240,27 +405,29 @@
 
         {% for membro in membros %}
             <div class="member-row">
-                <div>
+                <div class="member-info">
                     <strong>{{ membro.participante.username }}</strong>
-                    <p class="muted">{{ membro.participante.email }}</p>
+                    <p class="muted" style="font-size: 13px;">{{ membro.participante.email }}</p>
                 </div>
 
-                <div>
+                <div class="status-wrapper">
                   {% if usuario_eh_dono %}
-                  <a href="{% url 'alternar_pagamento' membro.id %}"
-                             style="text-decoration: none; display: flex; align-items: center; gap: 8px;">
-
-                                <span class="{% if membro.status_pagamento %}paid{% else %}pending{% endif %}">
-                   {% if membro.status_pagamento %}Pago{% else %}Pendente{% endif %}
-            </span>
-
+                  <a href="{% url 'alternar_pagamento' membro.id %} " style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                        {% if membro.status_pagamento %}
+                            <span class="badge badge-success">● Pago</span>
+                        {% else %}
+                        <span class="badge badge-danger">● Pendente</span>
+                        {% endif %}
                         <input type="checkbox"
                             {% if membro.status_pagamento %}checked{% endif %} onclick="event.preventDefault(); this.parentElement.click();">
-            </a>
+                  </a>
                    {% else %}
-                         <span class="{% if membro.status_pagamento %}paid{% else %}pending{% endif %}">
-                   {% if membro.status_pagamento %}Pago{% else %}Pendente{% endif %}
-           </span>
+                        {% if membro.status_pagamento %}
+                                <span class="badge badge-success">● Pago</span>
+                        {% else %}
+                                <span class="badge badge-danger">● Pendente</span>
+                        {% endif %}
+           
                    {% endif %}
             </div>
 
