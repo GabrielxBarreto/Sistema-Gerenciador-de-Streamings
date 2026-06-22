@@ -88,6 +88,7 @@ def dashboard(request):
         
         grupos_participando.append({
             'id': grupo_alheio.id,
+            'nome_grupo': grupo_alheio.name,
             'nome_streaming': grupo_alheio.streaming.name,
             'dono': grupo_alheio.owner.username,
             'dia_vencimento': grupo_alheio.dia_vencimento,
