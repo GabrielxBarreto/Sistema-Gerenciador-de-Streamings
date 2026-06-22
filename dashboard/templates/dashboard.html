@@ -347,24 +347,7 @@
                     </div>
                 </div>
                 <a class="btn-invite"  href="{% url 'detalhe_grupo' g.id %}" style="margin-top: 10px; text-decoration: none;"> 👥 Ver detalhes do grupo </a>
-                <div style="margin-top: 16px; border-top: 1px solid var(--surface); padding-top: 12px;">
-                    {% if not g.ocultar_membros %}
-                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Outros participantes neste grupo:</p>
-                        {% for parceiro in g.membros %}
-                            {% if parceiro.participante != user %}
-                                <div style="font-size: 14px; color: #bbb; margin-bottom: 4px; display: flex; justify-content: space-between;">
-                                    <span>👤 {{ parceiro.participante.username }}</span>
-                                    <span style="font-size: 12px; color: var(--text-muted);">🔥 {{ parceiro.streak }}</span>
-                                </div>
-                            {% endif %}
-                        {% empty %}
-                            <p style="font-size: 12px; color: var(--text-muted);">Apenas você e o dono estão aqui.</p>
-                        {% endfor %}
-                    {% else %}
-                        <p style="font-size: 12px; color: var(--text-muted); font-style: italic; display: flex; align-items: center; gap: 4px;">
-                            🔒 A lista de participantes foi ocultada pelo dono.
-                        </p>
-                    {% endif %}
+                <div style="margin-top: 16px; border-top: 1px solid var(--surface); padding-top: 12px;">  
                 </div>
                 </div>
             {% empty %}
