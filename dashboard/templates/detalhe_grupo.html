@@ -83,6 +83,10 @@
             box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
         }
 
+        .group-card:hover,.member-card:hover{
+        border-color:rgba(168,85,247,.25);
+        }
+
         .muted {
             color: var(--text-muted);
             font-size: 14px;
@@ -164,21 +168,51 @@
             font-weight: 700;
         }
 
+        .status-item span{
+            font-size:24px;
+        }
+
         .status-item:first-child h3 { color: var(--success); }
         .status-item:last-child h3 { color: var(--danger); }
 
         .member-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            gap: 16px;
-            flex-wrap: wrap;
+            background:var(--surface);
+            border:none;
+            border-radius:18px;
+            padding:18px;
+            margin-bottom:14px;
+            transition:all .25s ease;
         }
 
         .member-row:last-child {
             border-bottom: none;
+        }
+
+        .member-row:hover{
+            transform:translateY(-2px);
+        }
+
+        .member-info-wrapper{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .avatar{
+            width:44px;
+            height:44px;
+            border-radius:50%;
+            background:linear-gradient(
+                135deg,
+                #A855F7,
+                #7C3AED
+            );
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+            flex-shrink:0;
         }
 
         .member-info {
@@ -246,6 +280,14 @@
             transition: all 0.2s ease;
         }
 
+        .btn-primary{
+            background:linear-gradient(
+                135deg,
+                #A855F7,
+                #7C3AED
+            );
+        }
+
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-1px);
@@ -288,6 +330,94 @@
             cursor: pointer;
         }
 
+        .group-header{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:20px;
+        }
+
+        .group-tag{
+            display:inline-flex;
+            align-items:center;
+            padding:6px 12px;
+            border-radius:999px;
+            background:rgba(168,85,247,.15);
+            color:var(--accent);
+            font-size:12px;
+            font-weight:600;
+            margin-bottom:12px;
+        }
+
+        .payment-progress{
+            width:100%;
+            height:12px;
+            background:#2c2c2c;
+            border-radius:999px;
+            overflow:hidden;
+            margin-top:16px;
+        }
+
+        .payment-fill{
+            height:100%;
+            border-radius:999px;
+            background:linear-gradient(
+                90deg,
+                #22C55E,
+                #4ADE80
+            );
+        }
+
+        .owner-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            padding:6px 12px;
+            border-radius:999px;
+            background:#2f2410;
+            color:#fbbf24;
+            font-size:12px;
+            font-weight:600;
+        }
+
+        .user-link{
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .user-link:hover{
+            color: var(--accent);
+        }
+
+        @media (max-width:768px){
+
+            .info-grid{
+                grid-template-columns:1fr;
+            }
+
+            .status-grid{
+                grid-template-columns:1fr;
+            }
+
+            .member-row{
+                flex-direction:column;
+                align-items:flex-start;
+            }
+
+            .owner-actions{
+                width:100%;
+            }
+
+            .btn{
+                width:100%;
+            }
+
+            .group-header{
+                flex-direction:column;
+            }
+        }
 
     </style>
 </head>
@@ -298,14 +428,31 @@
     <a class="back" href="{% url 'dashboard' %}">← Voltar para dashboard</a>
 
     <div class="group-card">
-        <p class="muted">Detalhes do grupo</p>
-        <h1>{{ grupo.name }}</h1>
-        <p class="muted">{{ grupo.descricao }}</p>
+        <div class="group-header">
+
+            <div>
+
+                <span class="group-tag">
+                     {{ grupo.streaming.name }}
+                </span>
+
+                <h1>{{ grupo.name }}</h1>
+
+                <p class="muted">
+                    {{ grupo.descricao }}
+                </p>
+
+            </div>
+
+        </div>
 
         <div class="info-grid">
             <div class="info-box">
-                <p class="muted">Streaming</p>
-                <h3>{{ grupo.streaming.name }}</h3>
+                <p class="muted">Valor por pessoa</p>
+
+                <h3 style="color:#22C55E;">
+                    R$ {{ valor_por_pessoa|floatformat:2 }}
+                </h3>
             </div>
 
             <div class="info-box">
@@ -316,6 +463,7 @@
             <div class="info-box">
                 <p class="muted">Dono</p>
                 <h3>{{ grupo.owner.username }}</h3>
+                
             </div>
 
             <div class="info-box">
@@ -349,9 +497,32 @@
             <h2>Gerenciamento</h2>
 
             <div class="owner-actions" style="margin-top: 16px;">
-               <button type="button" class="btn btn-dark" onclick="navigator.clipboard.writeText('{{ link_convite }}').then(() => alert('Link copiado!'));">
-             🔗Copiar link
-         </button>
+               <button
+                type="button" 
+                class="btn btn-primary" 
+                onclick="copiarLink()">
+                🔗Copiar link
+                </button>
+
+                <script>
+                    function copiarLink(){
+
+                        navigator.clipboard.writeText(
+                            "{{ link_convite }}"
+                        );
+
+                        const btn = event.target;
+
+                        btn.innerHTML = "✅ Copiado!";
+
+                        setTimeout(() => {
+
+                            btn.innerHTML = "🔗 Copiar link";
+
+                        },2000);
+                    }
+                    </script>
+
                 <a class="btn btn-dark" href="{% url 'cobrar_participantes' grupo.id %}" onclick="return confirm('Enviar cobrança para todos os participantes pendentes?');"> 
                     Cobrar participantes 
                 </a>
@@ -404,10 +575,24 @@
        {% else %}
 
         {% for membro in membros %}
-            <div class="member-row">
-                <div class="member-info">
-                    <strong>{{ membro.participante.username }}</strong>
-                    <p class="muted" style="font-size: 13px;">{{ membro.participante.email }}</p>
+            <div class="member-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+                <div class="member-info-wrapper">
+                    <div class="avatar">
+                            {{ membro.participante.username|first|upper }}
+                        </div>
+
+                        <div class="member-info">
+                            <a
+                                href="{% url 'detalhe_membro' membro.id %}"
+                                class="user-link"
+                            >
+                                {{ membro.participante.username }}
+                            </a>
+
+                            <p class="muted" style="font-size:13px; margin-top:2px;">
+                                {{ membro.participante.email }}
+
+                        </div>
                 </div>
 
                 <div class="status-wrapper">
@@ -433,7 +618,6 @@
 
                 {% if usuario_eh_dono %}
                     <div class="owner-actions">
-                       <a class="btn btn-dark" href="{% url 'detalhe_membro' membro.id %}">Ver</a>
 
                      {% if membro.participante.email %}
                        {% if not membro.status_pagamento %}
