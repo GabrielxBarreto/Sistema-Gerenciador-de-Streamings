@@ -338,10 +338,17 @@
 
 
 
-                        <div>
-                            <h4 style="font-size: 16px;">{{ g.nome_grupo }}</h4>
-                            <p style="font-size: 13px; color: var(--text-muted);">Vence Dia {{ g.dia_vencimento }}</p>
+                        <div style="min-width: 0; flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 4px;">
+                        <h4 style="font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0;">
+            {{ g.nome_grupo }}
+                         </h4>
+                         <span class="streak-badge streak-{{ g.streak_pagamentos }}" style="flex-shrink: 0;">
+                         <span class="streak-fire">🔥</span>{{ g.streak_pagamentos }}
+                         </span>
                         </div>
+                     <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Vence Dia {{ g.dia_vencimento }}</p>
+                    </div>
                     </div>
                     <div style="text-align: right;">
                         <h4>R$ {{ g.minha_parte }}</h4>

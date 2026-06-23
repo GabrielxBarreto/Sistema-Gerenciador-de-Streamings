@@ -95,7 +95,8 @@ def dashboard(request):
             'minha_parte': f"{minha_parte:.2f}".replace('.', ','),
             'status_pagamento': vinculo.status_pagamento,
             'ocultar_membros': grupo_alheio.ocultar_membros,
-            'membros': membros_desse_grupo
+            'membros': membros_desse_grupo,
+            'streak_pagamentos': grupo_alheio.streak_pagamentos,
         })
 
     # Cálculos Financeiros
