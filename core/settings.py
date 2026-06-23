@@ -76,7 +76,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # settings.py
 
 # settings.py
-import os
 
 # Diz ao Django para usar o Anymail com o Brevo
 EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
@@ -92,7 +91,6 @@ DEFAULT_FROM_EMAIL = "corpaligator@gmail.com"
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-import os
 import dj_database_url
 
 # ... restante do seu settings.py ...

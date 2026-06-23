@@ -31,7 +31,7 @@ def login_view(request):
             django_login(request, user)
             return redirect('dashboard')
         else:
-            messages.error(request, 'E-mail ou senha incorretos.')
+            messages.error(request, 'Usuário ou senha incorretos.')
             
     return render(request, 'login.html')
     
