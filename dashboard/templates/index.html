@@ -5,9 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Squid - Gestão de Assinaturas</title>
+    
+    <!-- Fonte Inter -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    </style>
+    
+    <!-- Ícones Profissionais (Phosphor Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -16,15 +23,18 @@
         }
 
         body {
-            background-color: #000000; 
+            /* Fundo escuro mais sofisticado com um gradiente radial muito suave */
+            background: radial-gradient(circle at top left, #0f1318 0%, #050505 50%);
+            background-color: #050505; 
             color: #FFFFFF;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow-x: hidden;
         }
 
-        /* Barra de Navegação Superior */
+        /* --- Barra de Navegação Superior --- */
         header {
             display: flex;
             justify-content: space-between;
@@ -36,59 +46,65 @@
         }
 
         .logo {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 22px;
+            font-weight: 800;
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #00E5FF, #00A3B8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            gap: 10px;
+            letter-spacing: -0.5px;
+            color: #FFFFFF;
         }
 
         .logo img {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             object-fit: contain;
+        }
+
+        .logo-text {
+            background: linear-gradient(135deg, #00E5FF 0%, #0077FF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .nav-buttons {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 24px;
         }
 
         .btn-login {
-            color: #94A3B8;
+            color: #A0AEC0;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: color 0.2s;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .btn-login:hover {
-            color: #00E5FF;
+            color: #FFFFFF;
         }
 
         .btn-cta-nav {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.05);
             color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 10px 20px;
-            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 24px;
+            border-radius: 100px; /* Bordas arredondadas (Pill) */
             font-size: 14px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .btn-cta-nav:hover {
-            background: rgba(0, 229, 255, 0.1);
-            border-color: #00E5FF;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-1px);
         }
 
-        /* Seção Principal (Hero) */
+        /* --- Seção Principal (Hero) --- */
         main {
             max-width: 1200px;
             width: 100%;
@@ -96,126 +112,160 @@
             padding: 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 80px;
             align-items: center;
             flex-grow: 1;
         }
 
         .hero-text h1 {
-            font-size: 48px;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 20px;
+            font-size: 54px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px; /* Deixa o título mais moderno */
+            margin-bottom: 24px;
+            color: #F7FAFC;
         }
 
         .hero-text h1 span {
-            background: linear-gradient(135deg, #00E5FF, #00A3B8);
+            background: linear-gradient(135deg, #00E5FF 0%, #00B0FF 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline-block;
         }
 
         .hero-text p {
-            color: #94A3B8;
+            color: #A0AEC0;
             font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 32px;
-            max-width: 480px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 90%;
+            font-weight: 400;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #00E5FF, #00B0FF);
+            background: linear-gradient(135deg, #00E5FF, #0099FF);
             color: #000000;
             text-decoration: none;
-            border-radius: 16px;
-            padding: 18px 36px;
+            border-radius: 100px; /* Estilo pílula */
+            padding: 18px 40px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             display: inline-block;
-            transition: all 0.2s ease;
-            box-shadow: 0 8px 24px rgba(0, 229, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -10px rgba(0, 229, 255, 0.5);
         }
 
         .btn-primary:hover {
-            opacity: 1;
-            filter: brightness(1.1);
-            transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(0, 229, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -10px rgba(0, 229, 255, 0.7);
+            filter: brightness(1.05);
         }
 
-        /* Grid de Funcionalidades (Simulando o App) */
+        /* --- Grid de Funcionalidades (Cards) --- */
         .hero-visual {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 24px;
         }
 
         .feature-card {
-            background-color: #0D0E11;
-            border: 1px solid solid #171A21;
-            border-radius: 16px;
-            padding: 24px;
+            background: linear-gradient(145deg, rgba(25, 28, 33, 0.8), rgba(15, 17, 21, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 28px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            transition: all 0.2s ease-in-out;
+            gap: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Brilho sutil no topo do card */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(0, 229, 255, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.05);
+            transform: translateY(-6px);
+            border-color: rgba(0, 229, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 229, 255, 0.05);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card .icon {
-            font-size: 24px;
-            background: rgba(0, 229, 255, 0.08);
-            width: 48px;
-            height: 48px;
+            font-size: 28px;
+            background: rgba(0, 229, 255, 0.1);
+            width: 54px;
+            height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 14px;
             color: #00E5FF;
+            border: 1px solid rgba(0, 229, 255, 0.15);
         }
 
         .feature-card h3 {
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 600;
+            color: #F7FAFC;
+            letter-spacing: -0.3px;
         }
 
         .feature-card p {
-            color: #94A3B8;
-            font-size: 14px;
-            line-height: 1.5;
+            color: #8292A6;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        /* Footer sutil */
+        /* --- Footer --- */
         footer {
             text-align: center;
-            padding: 24px;
-            color: #444444;
-            font-size: 12px;
+            padding: 32px;
+            color: #4A5568;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        /* Responsividade para telas menores */
-        @media (max-width: 768px) {
-            header {
-                padding: 20px;
-            }
+        /* --- Responsividade --- */
+        @media (max-width: 992px) {
             main {
                 grid-template-columns: 1fr;
-                gap: 40px;
-                padding: 20px;
+                gap: 50px;
                 text-align: center;
             }
-            .hero-text h1 {
-                font-size: 36px;
-            }
             .hero-text p {
-                margin: 0 auto 32px auto;
+                margin: 0 auto 40px auto;
+            }
+            header {
+                padding: 20px 24px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero-text h1 {
+                font-size: 40px;
             }
             .hero-visual {
                 grid-template-columns: 1fr;
+            }
+            .nav-buttons {
+                gap: 12px;
+            }
+            .btn-cta-nav {
+                padding: 8px 16px;
             }
         }
     </style>
@@ -225,7 +275,7 @@
     <header>
         <div class="logo">
             <img src="{% static 'icons/SQUID.svg' %}" alt="Logo SQUID">
-            <span>SQUID</span>
+            <span class="logo-text">SQUID</span>
         </div>
         <div class="nav-buttons">
             <a href="{% url 'login' %}" class="btn-login">Entrar</a>
@@ -235,38 +285,35 @@
 
     <main>
         <div class="hero-text">
-            <h1>Todas as suas assinaturas. <span>Um só lugar.</span></h1>
+            <h1>Todas as suas assinaturas.<br><span>Um só lugar.</span></h1>
             <p>Monitore vencimentos, gerencie streamings e divida o valor das contas com seus amigos de forma automatizada e sem estresse.</p>
             <a href="{% url 'login' %}" class="btn-primary">Começar Agora — É Grátis</a>
         </div>
 
         <div class="hero-visual">
-            
-                    <div class="feature-card">
-                <div class="icon">👥</div>
+            <div class="feature-card">
+                <div class="icon"><i class="ph ph-users-three"></i></div>
                 <h3>Grupos Compartilhados</h3>
                 <p>Monte salas com seus amigos para dividir Netflix, Spotify, Disney+ e muito mais de forma justa.</p>
-                </div>
+            </div>
+            
             <div class="feature-card">
-                <div class="icon">💰</div>
+                <div class="icon"><i class="ph ph-calculator"></i></div>
                 <h3>Divisão Automática</h3>
                 <p>O sistema calcula em tempo real o valor exato da cota individual de cada participante cadastrado.</p>
             </div>
+            
             <div class="feature-card">
-                <div class="icon">🔒</div>
+                <div class="icon"><i class="ph ph-shield-check"></i></div>
                 <h3>Controle Financeiro</h3>
                 <p>Saiba quem já efetuou o pagamento e quem continua pendente no ciclo atual com um clique.</p>
             </div>
+            
             <div class="feature-card">
-                <div class="icon">📌</div>
+                <div class="icon"><i class="ph ph-chart-pie-slice"></i></div>
                 <h3>Tudo Organizado</h3>
                 <p>Saiba quem pagou, quem está devendo e quanto cada pessoa deve em cada grupo em tempo real.</p>
             </div>
-            
-
-            
-
-            
         </div>
     </main>
 
